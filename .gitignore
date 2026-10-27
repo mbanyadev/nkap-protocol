@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+.env.*
+.circle/
+*recovery*
+contracts/out/
+contracts/cache/
+
+.circle/
+*recovery*
+*.jsonl
+cache/
+.env*
