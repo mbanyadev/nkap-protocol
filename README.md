@@ -22,7 +22,7 @@ Built with [Arc Studio](https://studio.arc.io)
 - **Platform loader** — load by contract address + platform ID (or `?contract=&platform=` URL params); shows name, owner, pool, total paid, batch count, fee
 - **Fund pool** — top up a platform pool directly from the panel
 - **Batch editor** — paste CSV (`wallet,amount,label` or `wallet,shares,label`), reference (stored as bytes32), live quote of total + fee + pool shortfall, "fund shortfall in same tx" checkbox, Send batch button with explorer link
-- **Batch history** — `BatchPaid` events with expandable `PayoutSent` / `PayoutCredited` legs, last 5 000 blocks
+- **Batch history** — `BatchPaid` events with expandable `PayoutSent` / `PayoutCredited` legs, scanned from the deploy block (`?from=`) or the last 10 000 blocks
 - **Admin panel** — register platform, set operator spending allowance, withdraw pool, withdraw owed USDC, deploy new NkapPayouts from browser, claim protocol fees (protocol owner only)
 - **URL deep-linking** — `?network=testnet&contract=0x…&platform=0` pre-loads a platform on open
 
@@ -52,6 +52,7 @@ bun install
 |---|---|
 | `VITE_NKAP_ADDRESS` | Default Arc Mainnet NkapPayouts address (pre-filled in the UI) |
 | `VITE_NKAP_TESTNET_ADDRESS` | Optional testnet contract override (defaults to the demo deployment) |
+| `VITE_NKAP_DEPLOY_BLOCK` | Mainnet deploy block; batch history scans from here (`?from=<block>` overrides) |
 | `BASE_PATH` | Build base path, e.g. `/nkap-protocol/` for GitHub Pages |
 | `CIRCLE_WALLET_ID` | Circle developer-controlled wallet used by the demo scripts |
 | `CIRCLE_API_KEY` | Circle Standard Developer API Key (server-side scripts only, not exposed to browser) |

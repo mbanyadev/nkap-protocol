@@ -38,10 +38,10 @@ forge build && forge test
 ## Deployments
 
 ### Arc Testnet (demo, deployed before the two security fixes above)
-- NkapPayouts: `0x2a9515d90182e7a49edcbcd19e49eb8bfecc3f2f` (deploy block 69052700), feeBps 40
+- NkapPayouts: `0x2a9515d90182e7a49edcbcd19e49eb8bfecc3f2f` (deploy tx block 69050884), feeBps 40
 - Platform 0 "Vexlio Labs" with two batches:
-  - createPlatform: https://explorer.testnet.arc.io/tx/0x0962690c7f50f47d52831a576b15e0c0c7db23823823da1a5e8ab08a9c5c5ba4
-  - batch 1 (exact, `payout-run-001`): https://explorer.testnet.arc.io/tx/0xe20473950c5fdf0b2a7a0dd576833e2fc043d02ee49a0d0772975fd24e1d30d8
+  - createPlatform: https://explorer.testnet.arc.io/tx/0x0962690c7f50f47d52208f00a7b1b42f3a86171f3f5f71ae0a5fb92e809d1b3a
+  - batch 1 (exact, `payout-run-001`; one leg credited for pull withdrawal): https://explorer.testnet.arc.io/tx/0xe20473950c5fdf0b2a7a0dd576833e2fc043d02ee49a0d0772975fd24e1d30d8
   - batch 2 (50/30/20 split, `payout-run-002`): https://explorer.testnet.arc.io/tx/0xa1675f0666d903a347f74d6568ece0d0e2e9942a66bab5211030c476ccad667f
 
 ### Arc Mainnet
@@ -51,6 +51,7 @@ forge build && forge test
 
 - `VITE_NKAP_ADDRESS` — default mainnet contract shown in the UI
 - `VITE_NKAP_TESTNET_ADDRESS` — optional override of the testnet demo contract
+- `VITE_NKAP_DEPLOY_BLOCK` — mainnet deploy block (batch-history scan start; `?from=<block>` overrides)
 - `BASE_PATH` — build base path (e.g. `/nkap-protocol/` on GitHub Pages)
 - Scripts only (never bundled): `CIRCLE_API_KEY`, `CIRCLE_ENTITY_SECRET`, `CIRCLE_WALLET_ID`
 

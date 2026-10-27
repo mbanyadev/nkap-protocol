@@ -53,10 +53,20 @@ const TOPIC_PAYOUT_CREDITED = '0x5ff63671c653c1352ac17c1c9dab5666b70ff6eedf64697
 
 // Known deploy blocks per contract address (lowercase)
 const DEPLOY_BLOCK: Record<string, bigint> = {
-  '0x2a9515d90182e7a49edcbcd19e49eb8bfecc3f2f': 69052700n,
+  '0x2a9515d90182e7a49edcbcd19e49eb8bfecc3f2f': 69050800n,
 }
 
 // (RPC helpers imported from @/lib/rpc)
+
+// Optional scan start: ?from=<block> in the URL, or VITE_NKAP_DEPLOY_BLOCK for mainnet
+function urlFromBlock(): bigint | undefined {
+  const v = new URLSearchParams(window.location.search).get('from')
+  return v && /^\d+$/.test(v) ? BigInt(v) : undefined
+}
+function envDeployBlock(chainId: number): bigint | undefined {
+  const v = import.meta.env.VITE_NKAP_DEPLOY_BLOCK as string | undefined
+  return chainId === arcMainnet.id && v && /^\d+$/.test(v) ? BigInt(v) : undefined
+}
 
 // ── Cache ────────────────────────────────────────────────────────────────────
 
@@ -160,7 +170,7 @@ export function BatchHistory({ ctx, refreshKey }: Props) {
       // 1. Get current head via shared queue
       const head = await rpcBlockNumber(rpcUrl)
 
-      const knownDeploy = DEPLOY_BLOCK[contractAddr]
+      const knownDeploy = urlFromBlock() ?? envDeployBlock(resolvedChainId) ?? DEPLOY_BLOCK[contractAddr]
       const startBlock = knownDeploy ?? (head > 10000n ? head - 10000n : 0n)
       const totalSpan = head - startBlock + 1n
 
