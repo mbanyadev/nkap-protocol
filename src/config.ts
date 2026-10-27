@@ -58,3 +58,41 @@ export function getArcChain(chainId: number | undefined) {
 }
 
 export { MIN_MAX_FEE_PER_GAS }
+
+// ── Read-only network (no wallet) ────────────────────────────────────────────
+// Visitors without a wallet read Arc Mainnet by default. `?network=testnet`
+// switches the read-only view to Arc Testnet. A connected wallet on an Arc
+// chain always wins.
+
+export const TESTNET_DEMO_CONTRACT = '0x2a9515d90182e7a49edcbcd19e49eb8bfecc3f2f'
+
+export function getUrlNetworkChainId(): number {
+  if (typeof window === 'undefined') return arcMainnet.id
+  const n = new URLSearchParams(window.location.search).get('network')?.toLowerCase()
+  return n === 'testnet' || n === 'arc-testnet' || n === String(arcTestnet.id)
+    ? arcTestnet.id
+    : arcMainnet.id
+}
+
+/** Default contract for the read-only network when none is given in the URL. */
+export function getDefaultContract(chainId: number): string {
+  if (chainId === arcTestnet.id) {
+    return (import.meta.env.VITE_NKAP_TESTNET_ADDRESS as string | undefined) || TESTNET_DEMO_CONTRACT
+  }
+  return (import.meta.env.VITE_NKAP_ADDRESS as string | undefined) ?? ''
+}
+
+/** Chain used for reads: the wallet's Arc chain if connected, else the URL network. */
+export function resolveReadChainId(walletChainId: number | undefined, isConnected: boolean): number {
+  if (isConnected && getArcChain(walletChainId)) return walletChainId as number
+  return getUrlNetworkChainId()
+}
+
+/** Switch the read-only network without a wallet (updates the URL and reloads). */
+export function setUrlNetwork(chainId: number) {
+  const url = new URL(window.location.href)
+  if (chainId === arcTestnet.id) url.searchParams.set('network', 'testnet')
+  else url.searchParams.delete('network')
+  url.searchParams.delete('contract')
+  window.location.href = url.toString()
+}

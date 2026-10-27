@@ -5,7 +5,7 @@ import { arcTestnet } from 'viem/chains'
 import { RefreshCw, TrendingUp, Layers, DollarSign, AlertCircle, Loader2 } from 'lucide-react'
 import { NKAP_ABI, fmtUsdc, parseNativeUsdc, fmtAddr } from '@/lib/nkap'
 import { TxButton } from './TxButton'
-import { MIN_MAX_FEE_PER_GAS, arcMainnet } from '@/config'
+import { MIN_MAX_FEE_PER_GAS, arcMainnet, resolveReadChainId } from '@/config'
 import { rpcEthCall } from '@/lib/rpc'
 
 export interface PlatformCtx {
@@ -85,7 +85,8 @@ export function PlatformPanel({ initialContract, initialPlatformId, onLoad }: Pr
   const [platform, setPlatform]         = useState<readonly [string, string, bigint, bigint, bigint] | null>(null)
   const [feeBps, setFeeBps]             = useState<number | null>(null)
   const [fundAmt, setFundAmt]           = useState('')
-  const { address, chainId }            = useAccount()
+  const { address, chainId: walletChainId, isConnected } = useAccount()
+  const chainId = resolveReadChainId(walletChainId, isConnected)
 
   const validContract = isAddress(contractAddr)
   const pid = BigInt(pidStr.replace(/\D/g, '') || '0')

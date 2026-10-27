@@ -1,7 +1,6 @@
 {
   "contractAddress": "0x2a9515d90182e7a49edcbcd19e49eb8bfecc3f2f",
   "network": "ARC-TESTNET",
-  "deployerWalletId": "3c2464b2-8369-52e2-a782-800bbeca5396",
   "contract_code_path": "/home/user/app/contracts/NkapPayouts.sol",
   "contract_compiled_code_path": "/home/user/app/contracts/out/NkapPayouts.sol/NkapPayouts.json",
   "contract_network_and_links": {

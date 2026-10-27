@@ -4,6 +4,8 @@ import path from 'path'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 export default defineConfig({
+  // GitHub Pages serves the app from /<repo>/; set BASE_PATH there (defaults to /)
+  base: process.env.BASE_PATH || '/',
   plugins: [react(), nodePolyfills()],
   resolve: {
     alias: {

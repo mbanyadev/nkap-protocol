@@ -33,7 +33,7 @@ if (!CONTRACT || CONTRACT === "0x0000000000000000000000000000000000000000") {
 // ── constants ─────────────────────────────────────────────────────────────────
 const ARC_BLOCKCHAIN = "ARC-TESTNET";
 const RPC_URL        = "https://rpc.testnet.arc.io";
-const WALLET_ID      = "bba7e5cd-136b-5cb2-b427-123d717a0b78";
+const WALLET_ID      = process.env.CIRCLE_WALLET_ID ?? "";
 const WALLET_ADDR    = "0x486983fcc79725d2184ca89bdbcbeabf12f3bf75";
 
 const RECIPIENTS = [

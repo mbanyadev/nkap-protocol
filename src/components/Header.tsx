@@ -2,7 +2,7 @@ import { useAccount, useBalance, useSwitchChain } from 'wagmi'
 import { ConnectKitButton } from 'connectkit'
 import { ChevronDown, Zap, Circle } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
-import { ARC_CHAINS, getArcChain } from '@/config'
+import { ARC_CHAINS, getArcChain, resolveReadChainId, setUrlNetwork } from '@/config'
 import { fmtUsdc } from '@/lib/nkap'
 
 
@@ -110,7 +110,8 @@ export function Header() {
 }
 
 function NetworkSwitcher() {
-  const { chainId } = useAccount()
+  const { chainId: walletChainId, isConnected } = useAccount()
+  const chainId = resolveReadChainId(walletChainId, isConnected)
   const { switchChain, isPending } = useSwitchChain()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -177,7 +178,8 @@ function NetworkSwitcher() {
             <button
               key={chain.id}
               onClick={() => {
-                switchChain({ chainId: chain.id })
+                if (isConnected) switchChain({ chainId: chain.id })
+                else setUrlNetwork(chain.id)
                 setOpen(false)
               }}
               style={{

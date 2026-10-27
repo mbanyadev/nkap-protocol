@@ -5,7 +5,7 @@ import { arcMainnet } from '@/config'
 import { useAccount } from 'wagmi'
 import { ExternalLink, ChevronDown, ChevronRight, Loader2, Send, BookOpen, RefreshCw } from 'lucide-react'
 import { fmtUsdc, fmtAddr, bytes32ToStr } from '@/lib/nkap'
-import { getArcChain } from '@/config'
+import { getArcChain, resolveReadChainId } from '@/config'
 import { rpcBlockNumber, rpcScanLogs } from '@/lib/rpc'
 import type { RawLog } from '@/lib/rpc'
 import type { PlatformCtx } from './PlatformPanel'
@@ -108,7 +108,8 @@ function loadFromSession(key: string): CacheEntry | null {
 // ── Component ────────────────────────────────────────────────────────────────
 
 export function BatchHistory({ ctx, refreshKey }: Props) {
-  const { chainId } = useAccount()
+  const { chainId: walletChainId, isConnected } = useAccount()
+  const chainId = resolveReadChainId(walletChainId, isConnected)
   const [batches, setBatches] = useState<BatchEvent[]>([])
   const [loading, setLoading] = useState(false)
   const [scanLabel, setScanLabel] = useState('')          // "12 345 / 50 000 blocks"
@@ -116,8 +117,8 @@ export function BatchHistory({ ctx, refreshKey }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
 
-  // Default Arc Mainnet when no wallet connected
-  const resolvedChainId = chainId ?? arcMainnet.id
+  // Wallet's Arc chain if connected, else ?network= (default Arc Mainnet)
+  const resolvedChainId = chainId
   const viemChain = resolvedChainId === arcTestnet.id ? arcTestnet : arcMainnet
   const chain = getArcChain(chainId)
   const explorerBase: string =

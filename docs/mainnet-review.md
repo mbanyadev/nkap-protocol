@@ -183,3 +183,16 @@ The contract has zero dependencies on USDC's ERC-20 contract, CCTP, or any exter
 The contract is structurally sound for its purpose. Reentrancy is guarded at every value path. Fee maths are correct with benign integer-division dust that goes to the last recipient. The pull-withdrawal model correctly handles failed push transfers. Operator caps are enforced and revocable. There are no Arc-specific incompatibilities.
 
 The principal pre-mainnet action items are operational (treasury address, protocol owner wallet, gas limit verification) rather than code defects.
+
+---
+
+## Addendum — fixes applied after this review
+
+Two changes were made to `contracts/NkapPayouts.sol` after the review above. Sections 4 and 5 describe the code before them.
+
+1. **Bounded payout call (gas-bomb protection).** `_sendPayout` now uses an assembly `call(50000, recipient, amount, 0, 0, 0, 0)`. The 50,000-gas limit is unchanged, but no return data is copied, so a recipient that returns a huge payload cannot burn the batch's gas through memory expansion. Failed pushes are still credited to `owed[recipient]`.
+2. **Operator spending allowance.** The per-operator batch counter (`batchCap`, decremented by 1 per batch) was replaced with a USDC spending allowance. `setOperator(platformId, operator, allowance)` sets the total an operator may disburse; each `payout`/`payoutSplit` deducts the batch total and reverts with `OverOperatorAllowance` if it would exceed the remainder. `0` revokes. The platform owner is exempt.
+
+Tests: `contracts/test/NkapPayouts.Security.t.sol` (gas bomb and allowance cases). Full suite: 49 tests, all passing.
+
+The Arc Testnet demo contract `0x2a95…3f2f` predates these fixes. Mainnet is deployed from the fixed source.

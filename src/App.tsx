@@ -8,13 +8,13 @@ import { BatchEditor } from './components/BatchEditor'
 import { BatchHistory } from './components/BatchHistory'
 import { AdminPanel } from './components/AdminPanel'
 import type { PlatformCtx } from './components/PlatformPanel'
-import { getArcChain } from './config'
+import { getArcChain, getDefaultContract, getUrlNetworkChainId } from './config'
 
 // Read URL params for deep-linking
 function getUrlParams() {
   const p = new URLSearchParams(window.location.search)
   return {
-    contract: p.get('contract') ?? (import.meta.env.VITE_NKAP_ADDRESS as string | undefined) ?? '',
+    contract: p.get('contract') ?? getDefaultContract(getUrlNetworkChainId()),
     platform: p.get('platform') ?? '0',
   }
 }

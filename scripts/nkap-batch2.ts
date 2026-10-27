@@ -1,6 +1,6 @@
 /**
  * Nkap batch-2: payoutSplit — 50/30/20 of 0.05 USDC, ref payout-run-002
- * Uses Circle developer-controlled wallet bba7e5cd-…
+ * Uses the Circle developer-controlled wallet in CIRCLE_WALLET_ID
  * amount= field uses DECIMAL USDC string (e.g. "0.045200"), not wei bigint.
  */
 import {
@@ -21,7 +21,7 @@ const CONTRACT = (process.env.VITE_NKAP_ADDRESS ?? "0x2a9515d90182e7a49edcbcd19e
 // ── constants ─────────────────────────────────────────────────────────────────
 const ARC_BLOCKCHAIN = "ARC-TESTNET";
 const RPC_URL        = "https://rpc.testnet.arc.io";
-const WALLET_ID      = "bba7e5cd-136b-5cb2-b427-123d717a0b78";
+const WALLET_ID      = process.env.CIRCLE_WALLET_ID ?? "";
 const WALLET_ADDRESS = "0x486983fcc79725d2184ca89bdbcbeabf12f3bf75" as `0x${string}`;
 const PLATFORM_ID    = 0n;
 
